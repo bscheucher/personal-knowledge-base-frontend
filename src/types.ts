@@ -14,4 +14,5 @@ export interface DocumentResponse {
 export interface ChatMessageModel {
   role: "user" | "assistant";
   content: string;
+  delivery?: "complete" | "interrupted";
 }

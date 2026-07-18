@@ -3,7 +3,7 @@ import { useChat } from "../hooks/useChat.ts";
 import ChatWindow from "../components/ChatWindow.tsx";
 
 export default function ChatPage() {
-  const { messages, isStreaming, send } = useChat();
+  const { messages, isStreaming, send, cancel } = useChat();
   const [input, setInput] = useState("");
 
   const submit = (e: React.FormEvent) => {
@@ -31,13 +31,15 @@ export default function ChatPage() {
             placeholder="Ask a question…"
             className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm"
           />
-          <button
-            type="submit"
-            disabled={isStreaming || !input.trim()}
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50"
-          >
-            Send
-          </button>
+          {isStreaming ? (
+            <button type="button" onClick={cancel} className="rounded-md bg-amber-700 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600">
+              Stop
+            </button>
+          ) : (
+            <button type="submit" disabled={!input.trim()} className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50">
+              Send
+            </button>
+          )}
         </form>
       </div>
     </div>

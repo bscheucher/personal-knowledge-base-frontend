@@ -24,6 +24,11 @@ export default function ChatMessage({
         {streaming && message.content !== "" && (
           <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-slate-400 align-middle" />
         )}
+        {message.delivery === "interrupted" && (
+          <div className="mt-2 text-xs font-medium text-amber-700" role="status">
+            Answer interrupted
+          </div>
+        )}
       </div>
     </div>
   );
