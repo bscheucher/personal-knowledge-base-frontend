@@ -18,6 +18,12 @@ export default function LibraryPage() {
         </p>
       )}
 
+      {del.isError && (
+        <p role="alert" className="rounded-md bg-red-50 p-4 text-sm text-red-700">
+          Could not delete document: {del.error instanceof Error ? del.error.message : "unknown error"}
+        </p>
+      )}
+
       {data && (
         <DocumentList
           documents={data}

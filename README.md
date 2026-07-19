@@ -25,6 +25,7 @@ would otherwise be blocked by CORS. If the backend lives elsewhere, change the p
 ```bash
 npm run build    # type-check (tsc -b) + production bundle into dist/
 npm run lint     # type-check only
+npm test         # Vitest + React Testing Library in jsdom
 npm run preview  # serve the production build locally
 ```
 
@@ -44,8 +45,8 @@ src/
 - **Ingest is synchronous** on the backend, so an upload resolves with the already-final document
   (`READY` or `ERROR`); there is no intermediate status to poll. The library list is refetched on
   success via TanStack Query invalidation.
-- The chat stream has no explicit "done" event — the backend's reactive stream completes and closes
-  the connection, which `useChat` treats as end-of-stream (and prevents EventSource auto-reconnect).
+- The chat stream uses explicit `token`, `done`, and `error` SSE events. The byte-level parser is
+  tested for fragmented UTF-8, CRLF, multiline data, and final buffered frames.
 - **No source attribution yet.** The spec's `SourceCard` is deferred because the backend's
   `/api/chat/stream` returns only answer tokens, not the retrieved chunks. Add it once the backend
   surfaces sources.

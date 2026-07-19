@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, expect, it } from "vitest";
 import { SseParser } from "./sseParser.ts";
 
 const bytes = (value: string) => new TextEncoder().encode(value);
@@ -7,8 +6,8 @@ const bytes = (value: string) => new TextEncoder().encode(value);
 describe("SseParser", () => {
   it("handles fragmented CRLF frames, comments, and multiline data", () => {
     const parser = new SseParser();
-    assert.deepEqual(parser.push(bytes(": keepalive\r\nevent: token\r\ndata: {\"text\":\r")), []);
-    assert.deepEqual(parser.push(bytes("\ndata: \"hello\"}\r\n\r\n")), [
+    expect(parser.push(bytes(": keepalive\r\nevent: token\r\ndata: {\"text\":\r"))).toEqual([]);
+    expect(parser.push(bytes("\ndata: \"hello\"}\r\n\r\n"))).toEqual([
       { event: "token", data: '{"text":\n"hello"}' },
     ]);
   });
@@ -17,8 +16,8 @@ describe("SseParser", () => {
     const parser = new SseParser();
     const input = bytes('event: token\ndata: {"text":" ÖIF"}\n\n');
     const split = input.indexOf(0xc3) + 1;
-    assert.deepEqual(parser.push(input.slice(0, split)), []);
-    assert.deepEqual(parser.push(input.slice(split)), [
+    expect(parser.push(input.slice(0, split))).toEqual([]);
+    expect(parser.push(input.slice(split))).toEqual([
       { event: "token", data: '{"text":" ÖIF"}' },
     ]);
   });
@@ -26,14 +25,14 @@ describe("SseParser", () => {
   it("flushes a final frame without a trailing blank line", () => {
     const parser = new SseParser();
     parser.push(bytes('event: done\ndata: {"status":"complete"}'));
-    assert.deepEqual(parser.finish(), [
+    expect(parser.finish()).toEqual([
       { event: "done", data: '{"status":"complete"}' },
     ]);
   });
 
   it("parses terminal error events", () => {
     const parser = new SseParser();
-    assert.deepEqual(parser.push(bytes('event: error\ndata: {"status":"interrupted"}\n\n')), [
+    expect(parser.push(bytes('event: error\ndata: {"status":"interrupted"}\n\n'))).toEqual([
       { event: "error", data: '{"status":"interrupted"}' },
     ]);
   });
