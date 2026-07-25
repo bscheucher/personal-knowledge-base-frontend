@@ -112,7 +112,7 @@ export default function UploadForm() {
           </button>
           {active.isSuccess && (
             <span className="text-sm text-emerald-600">
-              Added “{active.data.title}” ({active.data.status}).
+              Added “{active.data.title}” — processing in the background.
             </span>
           )}
           {active.isError && (

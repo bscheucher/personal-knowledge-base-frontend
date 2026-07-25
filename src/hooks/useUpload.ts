@@ -3,10 +3,9 @@ import { ingestText, ingestUrl, uploadPdf } from "../api/client.ts";
 import { documentsKey } from "./useDocuments.ts";
 
 /**
- * Ingest mutations for the three source types. Ingest is synchronous on the
- * backend, so each mutation resolves with the already-final document (READY or
- * ERROR) — there is no separate status to poll. The document list is refreshed
- * on success.
+ * Ingest mutations for the three source types. Ingest runs in the background on the backend, so
+ * each mutation resolves with a PENDING document, not the final result. The document list is
+ * refreshed on success, and `useDocuments` polls it until the document reaches READY or ERROR.
  */
 export function useUpload() {
   const queryClient = useQueryClient();

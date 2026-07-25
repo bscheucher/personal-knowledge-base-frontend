@@ -8,6 +8,7 @@ export interface DocumentResponse {
   title: string;
   sourceType: SourceType;
   status: DocumentStatus;
+  failureReason: string | null;
   createdAt: string;
 }
 

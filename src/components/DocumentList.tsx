@@ -56,6 +56,9 @@ export default function DocumentList({
             <td className="px-4 py-2 text-slate-500">{doc.sourceType}</td>
             <td className="px-4 py-2">
               <StatusBadge status={doc.status} />
+              {doc.status === "ERROR" && doc.failureReason && (
+                <p className="mt-1 max-w-xs text-xs text-red-600">{doc.failureReason}</p>
+              )}
             </td>
             <td className="px-4 py-2 text-slate-500">
               {new Date(doc.createdAt).toLocaleString()}
